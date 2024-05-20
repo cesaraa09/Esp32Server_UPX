@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Servo Control</title>
+  <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Servo Control</h2>
+    <div class="form-group">
+      <label for="servo1_hour">Servo 1 Hour:</label>
+      <input type="number" id="servo1_hour" value="12">
+    </div>
+    <div class="form-group">
+      <label for="servo1_minute">Servo 1 Minute:</label>
+      <input type="number" id="servo1_minute" value="30">
+    </div>
+    <button onclick="updateServo1Time()">Update Servo 1 Time</button>
+    <div class="form-group">
+      <label for="servo2_hour">Servo 2 Hour:</label>
+      <input type="number" id="servo2_hour" value="15">
+    </div>
+    <div class="form-group">
+      <label for="servo2_minute">Servo 2 Minute:</label>
+      <input type="number" id="servo2_minute" value="45">
+    </div>
+    <button onclick="updateServo2Time()">Update Servo 2 Time</button>
+  </div>
+  <script src="/script.js"></script>
+</body>
+</html>
