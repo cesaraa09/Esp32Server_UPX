@@ -2,22 +2,28 @@
 <html>
 <head>
   <title>Alimentador automático para pets</title>
-  <!-- Retirar "/data" --> 
-  <link rel="stylesheet" type="text/css" href="/data/style.css">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="container">
-    <h2>Controle o horario em que seu animal ira comer!</h2>
+    <h2>Controle o horário em que seu animal irá comer!</h2>
+    <div id="schedules" class="schedule-container"></div>
+    <button onclick="addSchedule()">Adicionar horário</button>
+    <button onclick="saveSchedules()">Definir horários</button>
+    <hr>
     <div class="form-group">
-      <label for="servo1_hour">Hora:</label>
-      <input type="number" id="servo1_hour" value="12">
+      <button onclick="moveServo(1, 0)">Mover Servo 1 para 0 graus</button>
+      <button onclick="moveServo(1, 90)">Mover Servo 1 para 90 graus</button>
     </div>
-    <div class="form-group">
-      <label for="servo1_minute">Minuto:</label>
-      <input type="number" id="servo1_minute" value="30">
-    </div>
-    <button onclick="updateServo1Time()">Update Servo 1 Time</button>
-  <!-- Retirar "/data" --> 
-  <script src="/data/script.js"></script>
+  </div>
+
+  <div class="container">
+    <h2>Ração no pote</h2>
+    <p>Medida atual: <span id="medida_atual">0</span> gramas</p>
+    <canvas id="medidaChart"></canvas>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

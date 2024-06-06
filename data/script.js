@@ -1,12 +1,86 @@
-function updateServo1Time() {
-    const hour = document.getElementById('servo1_hour').value;
-    const minute = document.getElementById('servo1_minute').value;
-    fetch(`/updateServo1Time?hour=${hour}&minute=${minute}`);
+const websocket = new WebSocket(`ws://${window.location.hostname}/ws`);
+
+websocket.onmessage = function(event) {
+  const data = JSON.parse(event.data);
+  if (data.medida !== undefined) {
+    const medidaGramas = data.medida * 1000; 
+    document.getElementById('medida_atual').innerText = medidaGramas.toFixed(0); 
+
+    const now = new Date();
+    addDataToChart(now.toLocaleTimeString(), medidaGramas);
   }
-  
-  function updateServo2Time() {
-    const hour = document.getElementById('servo1_hour').value;
-    const minute = document.getElementById('servo1_minute').value;
-    fetch(`/updateServo2Time?hour=${hour}&minute=${minute}`);
+};
+
+function addSchedule() {
+  const schedulesDiv = document.getElementById('schedules');
+  const scheduleDiv = document.createElement('div');
+  scheduleDiv.className = 'schedule-group';
+  scheduleDiv.innerHTML = `
+    <input type="text" placeholder="Nome do horário">
+    <div class="form-group">
+      <label>Horário:</label>
+      <input type="time">
+    </div>
+    <button class="remove-btn" onclick="removeSchedule(this)">Remover horário</button>
+  `;
+  schedulesDiv.appendChild(scheduleDiv);
+}
+
+function removeSchedule(button) {
+  button.parentElement.remove();
+}
+
+function saveSchedules() {
+  const schedules = [];
+  const scheduleGroups = document.getElementsByClassName('schedule-group');
+  for (const group of scheduleGroups) {
+    const name = group.querySelector('input[type="text"]').value;
+    const time = group.querySelector('input[type="time"]').value.split(':');
+    const hour = parseInt(time[0]);
+    const minute = parseInt(time[1]);
+    const second = 0;
+    schedules.push({ name, hour, minute, second });
   }
-  
+  websocket.send(JSON.stringify({ action: 'saveSchedules', schedules }));
+}
+
+function moveServo(servoNumber, position) {
+  websocket.send(`moveServo?servo=${servoNumber}&position=${position}`);
+}
+
+const ctx = document.getElementById('medidaChart').getContext('2d');
+const medidaChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: [],
+    datasets: [{
+      label: 'Ração no pote (g)',
+      data: [],
+      borderColor: 'rgba(75, 192, 192, 1)',
+      borderWidth: 2,
+      fill: false
+    }]
+  },
+  options: {
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Tempo'
+        }
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'Quantidade (g)'
+        }
+      }
+    }
+  }
+});
+
+function addDataToChart(time, medida) {
+  medidaChart.data.labels.push(time);
+  medidaChart.data.datasets[0].data.push(medida);
+  medidaChart.update();
+}
