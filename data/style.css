@@ -21,7 +21,7 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   border-radius: 8px;
   text-align: center;
-  border: 2px solid #39ff14; /* Borda verde neon */
+  border: 2px solid #39ff14; 
 }
 
 h2 {
@@ -93,7 +93,7 @@ button:hover {
   align-items: flex-start;
   justify-content: center;
   width: calc(33.33% - 20px);
-  border: 2px solid #39ff14; /* Borda verde neon */
+  border: 2px solid #39ff14; 
 }
 
 .schedule-group input {

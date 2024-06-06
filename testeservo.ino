@@ -40,7 +40,7 @@ float medida = 0;
 Ticker scaleTicker;
 
 void notifyClients() {
-  String message = "{\"medida\":" + String(medida, 3) + "}"; // Ajustar a precisão aqui
+  String message = "{\"medida\":" + String(medida, 3) + "}"; // Ajustar a precisï¿½o aqui
   ws.textAll(message);
 }
 
@@ -117,7 +117,7 @@ void setup() {
   scale.set_scale(733428);
   delay(2000);
   scale.tare();
-  Serial.println("Balança Zerada");
+  Serial.println("Balanï¿½a Zerada");
 
   scaleTicker.attach(5, readScale);
 }
@@ -137,7 +137,7 @@ void loop() {
 
 void moveServo1() {
   if (!isServo1At0) {
-    servo1.write(45);
+    servo1.write(25);
     isServo1At0 = true;
     delay(3000);
     servo1.write(0);

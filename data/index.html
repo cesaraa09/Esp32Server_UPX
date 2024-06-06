@@ -13,8 +13,9 @@
     <button onclick="saveSchedules()">Definir horários</button>
     <hr>
     <div class="form-group">
-      <button onclick="moveServo(1, 0)">Mover Servo 1 para 0 graus</button>
-      <button onclick="moveServo(1, 90)">Mover Servo 1 para 90 graus</button>
+      <label for="servoPosition">Posição do Servo (0-180 graus):</label>
+      <input type="number" id="servoPosition" min="0" max="180">
+      <button onclick="moveServo()">Mover Servo</button>
     </div>
   </div>
 

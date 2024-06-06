@@ -44,8 +44,13 @@ function saveSchedules() {
   websocket.send(JSON.stringify({ action: 'saveSchedules', schedules }));
 }
 
-function moveServo(servoNumber, position) {
-  websocket.send(`moveServo?servo=${servoNumber}&position=${position}`);
+function moveServo() {
+  const position = document.getElementById('servoPosition').value;
+  if (position >= 0 && position <= 180) {
+    websocket.send(`moveServo?servo=1&position=${position}`);
+  } else {
+    alert("Por favor, insira um valor entre 0 e 180.");
+  }
 }
 
 const ctx = document.getElementById('medidaChart').getContext('2d');
