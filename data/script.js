@@ -53,6 +53,15 @@ function moveServo() {
   }
 }
 
+function moveServoForDuration(seconds) {
+  const position = document.getElementById('servoPosition').value;
+  if (position >= 0 && position <= 180) {
+    websocket.send(`moveServoForDuration?servo=1&position=${position}&duration=${seconds}`);
+  } else {
+    alert("Por favor, insira um valor entre 0 e 180.");
+  }
+}
+
 const ctx = document.getElementById('medidaChart').getContext('2d');
 const medidaChart = new Chart(ctx, {
   type: 'line',

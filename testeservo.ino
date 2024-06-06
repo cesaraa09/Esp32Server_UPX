@@ -10,8 +10,8 @@
 #include <ArduinoJson.h>
 #include <vector>
 
-const char* ssid = "VIVOFIBRA-35E2";
-const char* password = "33d71f35e2";
+const char* ssid = "cesarfone";
+const char* password = "12345679";
 
 const char* ntpServer = "pool.ntp.org";
 const long gmtOffset_sec = -3 * 3600;
@@ -38,6 +38,7 @@ std::vector<Schedule> schedules;
 HX711 scale;
 float medida = 0;
 Ticker scaleTicker;
+Ticker returnServoTicker;
 
 void notifyClients() {
   String message = "{\"medida\":" + String(medida, 3) + "}"; // Ajustar a precis�o aqui
@@ -67,6 +68,11 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {
       int servoNumber = message.substring(message.indexOf("servo=") + 6, message.indexOf("&position=")).toInt();
       int position = message.substring(message.indexOf("position=") + 9).toInt();
       moveServoToPosition(servoNumber, position);
+    } else if (message.indexOf("moveServoForDuration") >= 0) {
+      int servoNumber = message.substring(message.indexOf("servo=") + 6, message.indexOf("&position=")).toInt();
+      int position = message.substring(message.indexOf("position=") + 9, message.indexOf("&duration=")).toInt();
+      int duration = message.substring(message.indexOf("duration=") + 9).toInt();
+      moveServoForDuration(servoNumber, position, duration);
     }
   }
 }
@@ -86,6 +92,11 @@ void readScale() {
   medida = scale.get_units(5);
   Serial.println(medida, 3); 
   notifyClients();
+}
+
+void returnServoToZero() {
+  servo1.write(0);
+  Serial.println("Servo 1 voltou para 0 graus");
 }
 
 void setup() {
@@ -137,7 +148,7 @@ void loop() {
 
 void moveServo1() {
   if (!isServo1At0) {
-    servo1.write(25);
+    servo1.write(30);
     isServo1At0 = true;
     delay(3000);
     servo1.write(0);
@@ -150,5 +161,13 @@ void moveServoToPosition(int servoNumber, int position) {
   if (servoNumber == 1) {
     servo1.write(position);
     Serial.printf("Servo 1 moveu em %d graus\n", position);
+  }
+}
+
+void moveServoForDuration(int servoNumber, int position, int duration) {
+  if (servoNumber == 1) {
+    servo1.write(position);
+    Serial.printf("Servo 1 moveu em %d graus por %d segundos\n", position, duration);
+    returnServoTicker.once(duration, returnServoToZero);
   }
 }
